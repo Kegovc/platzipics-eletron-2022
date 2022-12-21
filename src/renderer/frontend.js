@@ -1,3 +1,5 @@
-window.addEventListener('load', ()=>{
-    document.getElementById('mensaje').innerText = 'Este es una mesaje insertado por JS'
-})
+const os = window.require('os')
+
+window.addEventListener("load", () => {
+  console.log(os.cpus());
+});

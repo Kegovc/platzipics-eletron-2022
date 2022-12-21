@@ -5,15 +5,19 @@
   "main": "index.js",
   "scripts": {
     "dev": "electron src/index.js",
+    "lint": "standard",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "kegovc <octaviovcruz@hotmail.com>",
   "license": "MIT",
   "dependencies": {
     "electron": "^22.0.0",
+    "electron-debug": "^3.2.0",
     "esm": "^3.2.25"
   },
   "devDependencies": {
-    "electron-reloader": "^1.2.3"
+    "devtron": "^1.4.0",
+    "electron-reloader": "^1.2.3",
+    "standard": "^17.0.0"
   }
 }

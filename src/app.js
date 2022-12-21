@@ -1,41 +1,64 @@
-'use strict'
+"use strict";
 
 // El objeto app permitirá controlar eventos
-import { app, BrowserWindow } from 'electron'
-import './devtools'
+
+const { app, BrowserWindow } = require ("electron");
+const devtool =  require("./devtools");
 
 // console.dir(app)
-// Imprimirá en consola saliendo después de quitar
-app.on('before-quit', () => {
-    console.log("saliendo...");
+
+function createWindow() {
+  let win = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+    },
+    width: 800,
+    height: 600,
+    title: "Hola Mundo!",
+    center: true,
+    maximizable: false,
+  });
+
+  win.once("ready-to-show", () => {
+    win.show();
+  });
+
+  win.on("move", () => {
+    const position = win.getPosition();
+    console.log(`la posición es ${position}`);
+  });
+  
+  win.on('closed', () => {
+    win = null
+    app.quit()
 })
+
+  win.loadFile("./renderer/index.html");
+}
+
+// Imprimirá en consola saliendo después de quitar
+app.on("before-quit", () => {
+  console.log("saliendo...");
+});
 
 // Construye nuestra primera ventana
-app.on('ready', () => {
-    let win = new BrowserWindow({
-        width: 800,
-        height: 600,
-        title: 'Hola Mundo!',
-        center: true,
-        maximizable: false,
-        show: false
-    })
+app.whenReady().then(() => {
+  createWindow();
 
-    win.once('ready-to-show', ()=>{
-        win.show();
-    })
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
 
-    win.on('move', ()=>{
-        const position = win.getPosition()
-        console.log(`la posición es ${position}`)
-    })
+});
 
-    win.on('closed', () => {
-        win = null
-        app.quit()
-    })
-    
-    win.loadURL(`file://${__dirname}/renderer/index.html`)
-})
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
 
 // app.quit()
