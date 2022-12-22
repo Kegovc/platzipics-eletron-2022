@@ -2,13 +2,14 @@
 
 // El objeto app permitirá controlar eventos
 
-const { app, BrowserWindow } = require ("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require ("electron");
 const devtool =  require("./devtools");
 
 // console.dir(app)
+let win;
 
 function createWindow() {
-  let win = new BrowserWindow({
+  win = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -61,5 +62,16 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
+
+ipcMain.on('open-directory',(event)=>{
+  dialog.showOpenDialog(win,{
+    title: 'Selecione la nueva ubicación',
+    buttonLabel: 'Abrir ubicación',
+    properties: ['openDirectory']
+  },(dir)=>{
+    console.log(dir)
+  })
+  //event.sender.send('pong', new Date())
+})
 
 // app.quit()
