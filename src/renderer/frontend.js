@@ -2,11 +2,21 @@
 
 const url = window.require('url')
 const path = window.require('path')
+const applyFilter = window.require('./filters')
 
 window.addEventListener("load", () => {
   addImagesEvents()
   searImageEvent()
+  selectEvent()
 });
+
+function selectEvent(){
+  const select = document.getElementById('filters')
+  select.addEventListener('change',function(){
+    console.log(this.value)
+    applyFilter(this.value, document.getElementById('image-displayed'))
+  })
+}
 
 
 function addImagesEvents () {
@@ -20,6 +30,10 @@ function addImagesEvents () {
 
 
 function changeImage(node){
+  if(!node){
+    document.getElementById('image-displayed').src = ''
+    return
+  }
   document.querySelector('li.list-group-item.selected')?.classList?.remove('selected')
   node.classList.add('selected')
   document.getElementById('image-displayed').src = node.querySelector('img').src
@@ -36,7 +50,6 @@ function searImageEvent(){
       thumbs.forEach(thumb=>{
         const fileUrl = url.parse(thumb.src)
         const fileName =  path.basename(fileUrl.pathname)
-        console.log(fileName)
         if(fileName.match(regex)){
           thumb.parentNode.classList.remove('hidden')
         } else{

@@ -13,6 +13,7 @@ function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
       enableRemoteModule: true,
+      nodeIntegrationInWorker: true,
     },
     width: 800,
     height: 600,
