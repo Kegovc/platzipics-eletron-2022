@@ -64,11 +64,12 @@ app.on("window-all-closed", () => {
 });
 
 ipcMain.on('open-directory',(event)=>{
+  console.log('open-directory')
   dialog.showOpenDialog(win,{
     title: 'Selecione la nueva ubicación',
     buttonLabel: 'Abrir ubicación',
     properties: ['openDirectory']
-  },(dir)=>{
+  }).then(dir=>{
     console.log(dir)
   })
   //event.sender.send('pong', new Date())
