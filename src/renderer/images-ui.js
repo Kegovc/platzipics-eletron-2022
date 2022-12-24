@@ -1,3 +1,5 @@
+const {applyFilter} = window.require("./filters");
+
 function addImagesEvents() {
   const thumbs = [...document.querySelectorAll("li.list-group-item")];
   thumbs.forEach((thumb) => {
@@ -16,8 +18,10 @@ function changeImage(node) {
     .querySelector("li.list-group-item.selected")
     ?.classList?.remove("selected");
   node.classList.add("selected");
-  document.getElementById("image-displayed").src =
-    node.querySelector("img").src;
+  const img = document.getElementById("image-displayed")
+  img.src = node.querySelector("img").src;
+  img.dataset.original = node.querySelector("img").src;
+  document.getElementById('filters').selectedIndex = 0
 }
 
 function selectFirstImage() {

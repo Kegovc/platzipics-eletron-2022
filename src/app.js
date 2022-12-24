@@ -8,7 +8,7 @@ const devtool = require("./devtools");
 const fs = require("fs");
 const isImage = require("is-image");
 import path from "path";
-import {filesize} from "filesize";
+import { filesize } from "filesize";
 
 // console.dir(app)
 let win;
@@ -81,28 +81,44 @@ ipcMain.on("open-directory", (event) => {
         fs.readdir(dir.filePaths[0], (err, files) => {
           if (err) {
             console.log("err", err);
-            throw err
+            throw err;
           }
 
           images.push(
             ...files
               .filter((file) => isImage(file))
               .map((img) => {
-                const imageFile = path.join(dir.filePaths[0], img)
-                const stats = fs.statSync(imageFile)
+                const imageFile = path.join(dir.filePaths[0], img);
+                const stats = fs.statSync(imageFile);
                 return {
                   filename: img,
                   src: `file://${imageFile}`,
-                  size: filesize(stats.size, {round: 0}),
+                  size: filesize(stats.size, { round: 0 }),
                 };
               })
           );
-          event.sender.send('load-images', images)
+          event.sender.send("load-images", images);
         });
       }
       console.log(dir);
     });
-  //event.sender.send('pong', new Date())
+});
+
+ipcMain.on("open-save-dialog", (event, ext) => {
+  console.log("open-save-dialog", ext)
+  dialog
+    .showSaveDialog(win, {
+      title: "Guardar imagen modificada",
+      buttonLabel: "Guardar imagen",
+      filters: [{name: 'Images', extensions: [ext.substring(1)]}],
+    })
+    .then((file) => {
+      if(file.canceled){
+        return
+      }
+      event.sender.send('save-image', file.filePath)
+      // console.log(file.filePath);
+    });
 });
 
 // app.quit()

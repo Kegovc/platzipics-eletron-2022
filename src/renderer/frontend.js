@@ -2,8 +2,8 @@
 
 const url = window.require("url");
 const path = window.require("path");
-const applyFilter = window.require("./filters");
-const { setIpc, openDirectory } = window.require("./ipcRendererEvent");
+
+const { setIpc, openDirectory, saveFile } = window.require("./ipcRendererEvent");
 const { addImagesEvents, searchImageEvent, selectEvent } =
   window.require("./images-ui");
 
@@ -13,6 +13,7 @@ window.addEventListener("load", () => {
   searchImageEvent();
   selectEvent();
   buttonEvent("open-directory", openDirectory);
+  buttonEvent("save-button", saveFile);
 });
 
 function buttonEvent(id, func) {
