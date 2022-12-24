@@ -3,13 +3,13 @@
 // El objeto app permitirá controlar eventos
 
 import { app, BrowserWindow } from "electron";
-import {setMainIpc} from "./ipcMainEvents";
+import { setMainIpc } from "./ipcMainEvents";
 import * as dev from "./devtools";
-import {setupErrors} from "./handle-error";
+import { setupErrors } from "./handle-error";
 
+import * as remote from "@electron/remote/main";
 
 // const dev = require('./devtools')
-
 
 // console.dir(app)
 let win;
@@ -19,8 +19,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true,
       nodeIntegrationInWorker: true,
+      show: false,
     },
     width: 800,
     height: 600,
@@ -31,8 +31,10 @@ function createWindow() {
 
   win.once("ready-to-show", () => {
     win.show();
-    setupErrors(win)
-    setMainIpc(win)
+    remote.initialize();
+    remote.enable(win.webContents);
+    setupErrors(win);
+    setMainIpc(win);
   });
 
   win.on("move", () => {
@@ -69,7 +71,5 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
-
 
 // app.quit()

@@ -1,7 +1,8 @@
 const { ipcRenderer } = window.require("electron");
 const path = window.require("path");
-const {saveImage} = window.require('./filters')
-const { clearImages, loadImages, addImagesEvents, selectFirstImage, file } = window.require("./images-ui");
+const { saveImage } = window.require("./filters");
+const { clearImages, loadImages, addImagesEvents, selectFirstImage, file } =
+  window.require("./images-ui");
 
 function setIpc() {
   ipcRenderer.on("load-images", (event, images) => {
@@ -12,25 +13,43 @@ function setIpc() {
     selectFirstImage();
   });
   ipcRenderer.on("save-image", (event, file) => {
-    saveImage(file).then(res=>{
-      showDialog('info','Platzipics', 'La imagen fue guardada')
-    }).catch(err=>{
-      showDialog('error','Platzipics', err.message)
-    })
-  })
+    saveImage(file)
+      .then((res) => {
+        showDialog("info", "Platzipics", "La imagen fue guardada");
+      })
+      .catch((err) => {
+        showDialog("error", "Platzipics", err.message);
+      });
+  });
+}
+
+function openPreferences() {
+  console.log("openPreferences");
+  const {BrowserWindow} = window.require("@electron/remote");
+  const preferencesWindow = new BrowserWindow({
+    width: 400,
+    height: 300,
+    title: "Preferencias",
+    center: true,
+    modal: true,
+    frame: false,
+    show: false,
+  });
+  preferencesWindow.show();
+  
 }
 
 function openDirectory() {
   ipcRenderer.send("open-directory");
 }
 
-function showDialog(type, title, message){
-  ipcRenderer.send('show-dialog', {type, title, message})
+function showDialog(type, title, message) {
+  ipcRenderer.send("show-dialog", { type, title, message });
 }
 
 function saveFile() {
-  const image = document.getElementById('image-displayed').dataset.original
-  const ext = path.extname(image)
+  const image = document.getElementById("image-displayed").dataset.original;
+  const ext = path.extname(image);
   ipcRenderer.send("open-save-dialog", ext);
 }
 
@@ -39,4 +58,5 @@ module.exports = {
   openDirectory,
   saveFile,
   showDialog,
+  openPreferences,
 };

@@ -3,7 +3,7 @@
 const url = window.require("url");
 const path = window.require("path");
 
-const { setIpc, openDirectory, saveFile } = window.require("./ipcRendererEvent");
+const { setIpc, openDirectory, saveFile, openPreferences } = window.require("./ipcRendererEvent");
 const { addImagesEvents, searchImageEvent, selectEvent } =
   window.require("./images-ui");
 
@@ -13,6 +13,7 @@ window.addEventListener("load", () => {
   searchImageEvent();
   selectEvent();
   buttonEvent("open-directory", openDirectory);
+  buttonEvent("open-preference", openPreferences);
   buttonEvent("save-button", saveFile);
 });
 
