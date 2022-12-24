@@ -2,8 +2,10 @@
 
 // El objeto app permitirá controlar eventos
 
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog, session } = require("electron");
 const devtool = require("./devtools");
+const {setupErrors} = require("./handle-error");
+const installExtension = require("electron-devtools-installer");
 
 const fs = require("fs");
 const isImage = require("is-image");
@@ -30,6 +32,7 @@ function createWindow() {
 
   win.once("ready-to-show", () => {
     win.show();
+    setupErrors(win)
   });
 
   win.on("move", () => {
@@ -105,19 +108,31 @@ ipcMain.on("open-directory", (event) => {
 });
 
 ipcMain.on("open-save-dialog", (event, ext) => {
-  console.log("open-save-dialog", ext)
+  console.log("open-save-dialog", ext);
   dialog
     .showSaveDialog(win, {
       title: "Guardar imagen modificada",
       buttonLabel: "Guardar imagen",
-      filters: [{name: 'Images', extensions: [ext.substring(1)]}],
+      filters: [{ name: "Images", extensions: [ext.substring(1)] }],
     })
     .then((file) => {
-      if(file.canceled){
-        return
+      if (file.canceled) {
+        return;
       }
-      event.sender.send('save-image', file.filePath)
+      event.sender.send("save-image", file.filePath);
       // console.log(file.filePath);
+    });
+});
+
+ipcMain.on("show-dialog", (event, { type, title, message }) => {
+  dialog
+    .showMessageBox(win, {
+      type,
+      title,
+      message,
+    })
+    .then((res) => {
+      console.log(res);
     });
 });
 
