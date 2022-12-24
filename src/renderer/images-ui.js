@@ -1,4 +1,4 @@
-const {applyFilter} = window.require("./filters");
+const { applyFilter } = window.require("./filters");
 
 function addImagesEvents() {
   const thumbs = [...document.querySelectorAll("li.list-group-item")];
@@ -18,10 +18,10 @@ function changeImage(node) {
     .querySelector("li.list-group-item.selected")
     ?.classList?.remove("selected");
   node.classList.add("selected");
-  const img = document.getElementById("image-displayed")
+  const img = document.getElementById("image-displayed");
   img.src = node.querySelector("img").src;
   img.dataset.original = node.querySelector("img").src;
-  document.getElementById('filters').selectedIndex = 0
+  document.getElementById("filters").selectedIndex = 0;
 }
 
 function selectFirstImage() {
@@ -58,7 +58,8 @@ function selectEvent() {
   const select = document.getElementById("filters");
   select.addEventListener("change", function () {
     console.log(this.value);
-    applyFilter(this.value, document.getElementById("image-displayed"));
+    if (this.value)
+      applyFilter(this.value, document.getElementById("image-displayed"));
   });
 }
 

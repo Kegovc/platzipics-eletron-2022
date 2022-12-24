@@ -1,4 +1,4 @@
-const { app, dialog } = require("electron");
+import { app, dialog } from "electron";
 
 function relaunchApp(win) {
   dialog.showMessageBox(win, {
@@ -11,7 +11,7 @@ function relaunchApp(win) {
   });
 }
 
-function setupErrors(win) {
+export function setupErrors(win) {
   win.webContents.on("crashed", () => {
     relaunchApp(win)
   });
@@ -31,6 +31,3 @@ function setupErrors(win) {
     relaunchApp(win)
   })
 }
-
-
-module.exports = {setupErrors}
