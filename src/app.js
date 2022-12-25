@@ -12,42 +12,50 @@ import * as remote from "@electron/remote/main";
 // const dev = require('./devtools')
 
 // console.dir(app)
-let win;
+// let win;
+global.win // eslint-disable-line camelcase
 
 function createWindow() {
-  win = new BrowserWindow({
+  global.win = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       nodeIntegrationInWorker: true,
-      show: false,
+
+      plugins: true, 
+      
+      
+      backgroundThrottling: false,
+      nativeWindowOpen: false,
+      webSecurity: false 
     },
     width: 800,
     height: 600,
     title: "Hola Mundo!",
     center: true,
     maximizable: false,
+    show: false,
   });
 
-  win.once("ready-to-show", () => {
-    win.show();
+  global.win.once("ready-to-show", () => {
+    global.win.show();
     remote.initialize();
-    remote.enable(win.webContents);
-    setupErrors(win);
-    setMainIpc(win);
+    remote.enable(global.win.webContents);
+    setupErrors(global.win);
+    setMainIpc(global.win);
   });
 
-  win.on("move", () => {
-    const position = win.getPosition();
+  global.win.on("move", () => {
+    const position = global.win.getPosition();
     console.log(`la posición es ${position}`);
   });
 
-  win.on("closed", () => {
-    win = null;
+  global.win.on("closed", () => {
+    global.win = null;
     app.quit();
   });
 
-  win.loadFile("./renderer/index.html");
+  global.win.loadFile("./renderer/index.html");
 }
 
 // Imprimirá en consola saliendo después de quitar

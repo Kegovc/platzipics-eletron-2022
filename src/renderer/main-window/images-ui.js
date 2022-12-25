@@ -1,4 +1,4 @@
-const { applyFilter } = window.require("./filters");
+const { applyFilter } = window.require("./main-window/filters");
 
 function addImagesEvents() {
   const thumbs = [...document.querySelectorAll("li.list-group-item")];

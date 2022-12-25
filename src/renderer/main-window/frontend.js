@@ -3,9 +3,9 @@
 const url = window.require("url");
 const path = window.require("path");
 
-const { setIpc, openDirectory, saveFile, openPreferences } = window.require("./ipcRendererEvent");
+const { setIpc, openDirectory, saveFile, openPreferences } = window.require("./main-window/ipcRendererEvent");
 const { addImagesEvents, searchImageEvent, selectEvent } =
-  window.require("./images-ui");
+  window.require("./main-window/images-ui");
 
 window.addEventListener("load", () => {
   setIpc();

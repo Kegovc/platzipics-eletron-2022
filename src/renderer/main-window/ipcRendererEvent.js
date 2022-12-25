@@ -1,8 +1,8 @@
 const { ipcRenderer } = window.require("electron");
 const path = window.require("path");
-const { saveImage } = window.require("./filters");
+const { saveImage } = window.require("./main-window/filters");
 const { clearImages, loadImages, addImagesEvents, selectFirstImage, file } =
-  window.require("./images-ui");
+  window.require("./main-window/images-ui");
 
 function setIpc() {
   ipcRenderer.on("load-images", (event, images) => {
@@ -25,17 +25,32 @@ function setIpc() {
 
 function openPreferences() {
   console.log("openPreferences");
-  const {BrowserWindow} = window.require("@electron/remote");
+  const {BrowserWindow, getGlobal, require} = window.require("@electron/remote");
+  const remoteMain = require("@electron/remote/main");
+  const mainWindow = getGlobal('win')
+  console.log({mainWindow})
   const preferencesWindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      nodeIntegrationInWorker: true,
+    },
     width: 400,
     height: 300,
     title: "Preferencias",
     center: true,
     modal: true,
-    frame: false,
+    frame: true,
     show: false,
   });
-  preferencesWindow.show();
+  preferencesWindow.setParentWindow(mainWindow)
+  preferencesWindow.once('ready-to-show',()=>{
+    preferencesWindow.show();
+    preferencesWindow.focus();
+    remoteMain.enable(preferencesWindow.webContents);
+  })
+  
+  preferencesWindow.loadURL(`file://${path.join(__dirname, '..')}/preferences.html`)
   
 }
 
