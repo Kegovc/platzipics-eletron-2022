@@ -88,6 +88,10 @@ function searchImageEvent() {
   });
 }
 
+function print(){
+  window.print()
+}
+
 module.exports = {
   addImagesEvents,
   searchImageEvent,
@@ -96,4 +100,5 @@ module.exports = {
   selectFirstImage,
   clearImages,
   loadImages,
+  print
 };

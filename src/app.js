@@ -4,7 +4,7 @@
 
 import { app, BrowserWindow, Tray } from "electron";
 import { setMainIpc } from "./ipcMainEvents";
-//import * as dev from "./devtools";
+import * as dev from "./devtools";
 import { setupErrors } from "./handle-error";
 import os from "os";
 import path from "path";
@@ -64,23 +64,12 @@ function createWindow() {
   if (os.platform() === "win32") {
     icon = path.join(__dirname, "assets", "icons", "tray-icon.ico");
   }
-  console.log(icon);
 
   global.tray = new Tray(icon);
   global.tray.setToolTip("Esto es platizipics");
   global.tray.on("click", () => {
     global.win.isVisible() ? global.win.hide() : global.win.show();
   });
-}
-
-// Imprimirá en consola saliendo después de quitar
-app.on("before-quit", () => {
-  console.log("saliendo...");
-});
-
-// Construye nuestra primera ventana
-app.whenReady().then(() => {
-  createWindow();
   // const contextMenu = Menu.buildFromTemplate([
   //   { label: 'Item1', type: 'radio' },
   //   { label: 'Item2', type: 'radio' }
@@ -91,6 +80,17 @@ app.whenReady().then(() => {
 
   // // Call this again for Linux because we modified the context menu
   // global.tray.setContextMenu(contextMenu)
+}
+
+// Imprimirá en consola saliendo después de quitar
+app.on("before-quit", () => {
+  console.log("saliendo...");
+});
+
+// Construye nuestra primera ventana
+app.whenReady().then(() => {
+  createWindow();
+
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {

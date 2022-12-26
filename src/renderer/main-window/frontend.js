@@ -4,7 +4,7 @@ const url = window.require("url");
 const path = window.require("path");
 
 const { setIpc, openDirectory, saveFile, openPreferences } = window.require("./main-window/ipcRendererEvent");
-const { addImagesEvents, searchImageEvent, selectEvent } =
+const { addImagesEvents, searchImageEvent, selectEvent, print } =
   window.require("./main-window/images-ui");
 
 window.addEventListener("load", () => {
@@ -15,6 +15,7 @@ window.addEventListener("load", () => {
   buttonEvent("open-directory", openDirectory);
   buttonEvent("open-preference", openPreferences);
   buttonEvent("save-button", saveFile);
+  buttonEvent("print-button", print);
 });
 
 function buttonEvent(id, func) {
