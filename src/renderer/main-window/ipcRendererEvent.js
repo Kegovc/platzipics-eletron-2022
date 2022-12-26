@@ -1,17 +1,26 @@
 const { ipcRenderer } = window.require("electron");
 const path = window.require("path");
 const { saveImage } = window.require("./main-window/filters");
+const store = window.require("./utilities/store");
 const { clearImages, loadImages, addImagesEvents, selectFirstImage, file } =
   window.require("./main-window/images-ui");
 
-function setIpc() {
-  ipcRenderer.on("load-images", (event, images) => {
+
+async function setIpc() {
+
+  if(await store.has('directory')){
+    ipcRenderer.send("load-directory", await store.get('directory'));
+  }
+  
+  ipcRenderer.on("load-images", (event, dir, images) => {
     clearImages();
-    console.log(`load-images recibido - `, images);
     loadImages(images);
     addImagesEvents();
     selectFirstImage();
+    store.set('directory',dir)
+    document.getElementById('directory').innerText = dir
   });
+
   ipcRenderer.on("save-image", (event, file) => {
     saveImage(file)
       .then((res) => {
@@ -33,14 +42,14 @@ function openPreferences() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      nodeIntegrationInWorker: true,
+      // nodeIntegrationInWorker: true,
     },
     width: 400,
     height: 300,
     title: "Preferencias",
     center: true,
     modal: true,
-    frame: true,
+    frame: false,
     show: false,
   });
   preferencesWindow.setParentWindow(mainWindow)

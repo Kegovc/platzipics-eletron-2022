@@ -9,7 +9,7 @@ if (env === 'development') {
             debug: true,
             watchRenderer: true
         });
-        //electronDebug({showDevTools: true})
+        electronDebug({showDevTools: true})
         
     } catch (_) { console.log('Error', _); }    
 }

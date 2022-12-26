@@ -5,7 +5,49 @@ import isImage from "is-image";
 import path from "path";
 import { filesize } from "filesize";
 
+import Store from 'electron-store'
+
+function loadImages(event, dir){
+  if (dir) {
+    const images = [];
+    fs.readdir(dir, (err, files) => {
+      if (err) {
+        console.log("err", err);
+        throw err;
+      }
+
+      images.push(
+        ...files
+          .filter((file) => isImage(file))
+          .map((img) => {
+            const imageFile = path.join(dir, img);
+            const stats = fs.statSync(imageFile);
+            return {
+              filename: img,
+              src: `file://${imageFile}`,
+              size: filesize(stats.size, { round: 0 }),
+            };
+          })
+      );
+      event.sender.send("load-images", dir, images);
+    });
+  }
+}
+
 export function setMainIpc(win) {
+  const store = new Store()
+  ipcMain.handle('hasStore', (event, key) => {
+    return store.has(key);
+  });
+  ipcMain.handle('getStore', (event, key) => {
+    return key?store.get(key):store.get();
+  });
+  ipcMain.handle('setStore', (event, key, value) => {
+    return store.set(key, value);
+  });
+
+  ipcMain.on("load-directory", loadImages)
+
   ipcMain.on("open-directory", (event) => {
     console.log("open-directory");
     dialog
@@ -15,30 +57,7 @@ export function setMainIpc(win) {
         properties: ["openDirectory"],
       })
       .then((dir) => {
-        if (dir) {
-          const images = [];
-          fs.readdir(dir.filePaths[0], (err, files) => {
-            if (err) {
-              console.log("err", err);
-              throw err;
-            }
-
-            images.push(
-              ...files
-                .filter((file) => isImage(file))
-                .map((img) => {
-                  const imageFile = path.join(dir.filePaths[0], img);
-                  const stats = fs.statSync(imageFile);
-                  return {
-                    filename: img,
-                    src: `file://${imageFile}`,
-                    size: filesize(stats.size, { round: 0 }),
-                  };
-                })
-            );
-            event.sender.send("load-images", images);
-          });
-        }
+        loadImages(event, dir.filePaths[0])
         console.log(dir);
       });
   });
