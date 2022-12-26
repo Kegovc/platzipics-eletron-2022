@@ -4,6 +4,7 @@ const { saveImage } = window.require("./main-window/filters");
 const store = window.require("./utilities/store");
 const showDialog = window.require("./utilities/dialog");
 const { decrypt } = window.require("./utilities/crypto");
+const os = window.require("os");
 const { clearImages, loadImages, addImagesEvents, selectFirstImage, file } =
   window.require("./main-window/images-ui");
 const Cloudup = window.require("cloudup-client");
@@ -40,12 +41,11 @@ function openPreferences() {
     window.require("@electron/remote");
   const remoteMain = require("@electron/remote/main");
   const mainWindow = getGlobal("win");
-  console.log({ mainWindow });
   const preferencesWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      // nodeIntegrationInWorker: true,
+      nodeIntegrationInWorker: true,
     },
     width: 400,
     height: 300,
@@ -55,7 +55,11 @@ function openPreferences() {
     frame: false,
     show: false,
   });
-  preferencesWindow.setParentWindow(mainWindow);
+
+  if(os.platform() !== 'win32'){
+    preferencesWindow.setParentWindow(mainWindow)
+  }
+
   preferencesWindow.once("ready-to-show", () => {
     preferencesWindow.show();
     preferencesWindow.focus();
