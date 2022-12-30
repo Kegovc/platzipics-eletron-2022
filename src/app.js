@@ -96,7 +96,8 @@ app.whenReady().then(() => {
 
   protocol.registerFileProtocol('plp', (request, callback) => {
     const url = request.url.substr(6)
-    callback({path: path.normalize(url)}) // eslint-disable-line
+    let myurl = decodeURIComponent(url)
+    callback({path: path.normalize(myurl)}) // eslint-disable-line
   }, (err) => {
     if (err) throw err
   })
