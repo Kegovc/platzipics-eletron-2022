@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from "electron";
+import { ipcMain, dialog, Menu } from "electron";
 
 import fs from "fs";
 import isImage from "is-image";
@@ -90,4 +90,5 @@ export function setMainIpc(win) {
         console.log(res);
       });
   });
+
 }
