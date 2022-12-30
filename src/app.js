@@ -2,7 +2,7 @@
 
 // El objeto app permitirá controlar eventos
 
-import { app, BrowserWindow, Tray, globalShortcut } from "electron";
+import { app, BrowserWindow, Tray, globalShortcut, protocol } from "electron";
 import { setMainIpc } from "./ipcMainEvents";
 import * as dev from "./devtools";
 import { setupErrors } from "./handle-error";
@@ -93,6 +93,14 @@ app.on("before-quit", () => {
 
 // Construye nuestra primera ventana
 app.whenReady().then(() => {
+
+  protocol.registerFileProtocol('plp', (request, callback) => {
+    const url = request.url.substr(6)
+    callback({path: path.normalize(url)}) // eslint-disable-line
+  }, (err) => {
+    if (err) throw err
+  })
+
   createWindow();
 
 

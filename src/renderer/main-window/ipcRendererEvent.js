@@ -108,7 +108,7 @@ async function uploadImage() {
     image = imageNode.dataset.filtered;
   }
 
-  image = image.replace("file://", "");
+  image = image.replace("plp://", "");
   let fileName = path.basename(image);
 
   if (12) {

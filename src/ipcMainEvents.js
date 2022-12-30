@@ -24,7 +24,7 @@ function loadImages(event, dir){
             const stats = fs.statSync(imageFile);
             return {
               filename: img,
-              src: `file://${imageFile}`,
+              src: `plp://${imageFile}`,
               size: filesize(stats.size, { round: 0 }),
             };
           })

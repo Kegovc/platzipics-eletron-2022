@@ -22,7 +22,7 @@ function saveImage(filename) {
       resolver();
     };
     if (fileSrc.indexOf(";base64") === -1) {
-      fileSrc = fileSrc.replace("file://", "");
+      fileSrc = fileSrc.replace("plp://", "");
       fs.copyFile(fileSrc, filename, fs.constants.COPYFILE_FICLONE, cb);
     }
     // console.log(fileSrc);
