@@ -2,7 +2,7 @@
 
 // El objeto app permitirá controlar eventos
 
-import { app, BrowserWindow, Tray } from "electron";
+import { app, BrowserWindow, Tray, globalShortcut } from "electron";
 import { setMainIpc } from "./ipcMainEvents";
 import * as dev from "./devtools";
 import { setupErrors } from "./handle-error";
@@ -33,7 +33,7 @@ function createWindow() {
     },
     width: 800,
     height: 600,
-    title: "Hola Mundo!",
+    title: "Platzipics",
     center: true,
     maximizable: false,
     show: false,
@@ -45,6 +45,10 @@ function createWindow() {
     remote.enable(global.win.webContents);
     setupErrors(global.win);
     setMainIpc(global.win);
+    globalShortcut.register('CommandOrControl+Alt+p', () => {
+      global.win.show()
+      global.win.focus()
+    })
   });
 
   global.win.on("move", () => {
@@ -84,7 +88,7 @@ function createWindow() {
 
 // Imprimirá en consola saliendo después de quitar
 app.on("before-quit", () => {
-  console.log("saliendo...");
+  globalShortcut.unregisterAll()
 });
 
 // Construye nuestra primera ventana
@@ -100,6 +104,7 @@ app.whenReady().then(() => {
 });
 
 app.on("window-all-closed", () => {
+  console.log("window-all-closed")
   if (process.platform !== "darwin") {
     app.quit();
   }
