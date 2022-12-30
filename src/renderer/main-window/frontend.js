@@ -3,7 +3,7 @@
 const url = window.require("url");
 const path = window.require("path");
 
-const { setIpc, openDirectory, saveFile, openPreferences, uploadImage } = window.require("./main-window/ipcRendererEvent");
+const { setIpc, openDirectory, saveFile, openPreferences, uploadImage, pasteImage } = window.require("./main-window/ipcRendererEvent");
 const { addImagesEvents, searchImageEvent, selectEvent, print } =
   window.require("./main-window/images-ui");
 
@@ -17,6 +17,7 @@ window.addEventListener("load", () => {
   buttonEvent("save-button", saveFile);
   buttonEvent("print-button", print);
   buttonEvent("upload-button", uploadImage);
+  buttonEvent("paste-button", pasteImage);
 });
 
 function buttonEvent(id, func) {

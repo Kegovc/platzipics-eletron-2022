@@ -20,6 +20,7 @@ function changeImage(node) {
   node.classList.add("selected");
   const img = document.getElementById("image-displayed");
   img.src = node.querySelector("img").src;
+  console.log('changeImage')
   img.dataset.original = node.querySelector("img").src;
   document.getElementById("filters").selectedIndex = 0;
 }

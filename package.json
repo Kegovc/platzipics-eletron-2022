@@ -19,7 +19,8 @@
     "electron-store": "^8.1.0",
     "esm": "^3.2.25",
     "filesize": "^10.0.6",
-    "is-image": "^3.1.0"
+    "is-image": "^3.1.0",
+    "pcloud-sdk-js": "^2.0.0"
   },
   "devDependencies": {
     "electron-reloader": "^1.2.3",

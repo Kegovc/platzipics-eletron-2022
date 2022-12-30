@@ -2,7 +2,8 @@ const fs = window.require("fs");
 
 function applyFilter(filter, currentImage) {
   const imgObj = new Image();
-  imgObj.src = currentImage.src;
+  console.log('applyFilter')
+  imgObj.src = currentImage.dataset.original;
 
   filterous // eslint-disable-line
     .importImage(imgObj, {})
@@ -24,9 +25,9 @@ function saveImage(filename) {
       fileSrc = fileSrc.replace("file://", "");
       fs.copyFile(fileSrc, filename, fs.constants.COPYFILE_FICLONE, cb);
     }
-    console.log(fileSrc);
+    // console.log(fileSrc);
     fileSrc = fileSrc.replace(/^data:([A-Za-z-+/]+);base64,/, "");
-    console.log(fileSrc);
+    // console.log(fileSrc);
 
     fs.writeFile(filename, fileSrc, "base64", cb);
   });
