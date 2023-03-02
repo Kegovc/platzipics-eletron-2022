@@ -24,9 +24,13 @@ function loadImages(event, dir){
             const stats = fs.statSync(imageFile);
             return {
               filename: img,
+              filenameExtlees: img.split('.').slice(0,-1).join('.'),
               src: `plp://${imageFile}`,
               size: filesize(stats.size, { round: 0 }),
             };
+          }).filter(file=>{
+            console.log(file.filenameExtlees, file.filenameExtlees[0])
+            return file.filenameExtlees[0]!=='.'
           })
       );
       event.sender.send("load-images", dir, images);

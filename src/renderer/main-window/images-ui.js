@@ -39,7 +39,16 @@ function clearImages() {
 
 function loadImages(images) {
   const imagesList = document.querySelector("ul.list-group");
-  images.forEach((img) => {
+  
+  images.sort((a,b)=>{
+    console.log(isNaN(a.filenameExtlees),isNaN(b.filenameExtlees))
+    if(isNaN(a.filenameExtlees)||isNaN(b.filenameExtlees)){
+      return a.filenameExtlees.localeCompare(b.filenameExtlees)
+    } else{
+      console.log(Number(a.filenameExtlees)-Number(b.filenameExtlees))
+      return Number(a.filenameExtlees)-Number(b.filenameExtlees)
+    }
+  }).forEach((img) => {
     const node = `<li class="list-group-item">
       <img
         class="media-object pull-left"
